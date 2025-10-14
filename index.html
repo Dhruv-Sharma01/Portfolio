@@ -86,6 +86,53 @@
             box-shadow: 0 0 25px rgba(6, 182, 212, 0.3), 0 0 10px rgba(6, 182, 212, 0.2);
         }
         
+        /* Interactive Timeline Styles */
+        .timeline-item {
+            position: relative;
+            width: 50%;
+            padding: 10px 40px;
+            box-sizing: border-box;
+        }
+        .timeline-item:nth-child(odd) {
+            left: 0;
+            padding-right: 20px;
+            text-align: right;
+        }
+        .timeline-item:nth-child(even) {
+            left: 50%;
+             padding-left: 20px;
+        }
+        .timeline-content {
+            padding: 20px;
+            background-color: #1e293b;
+            position: relative;
+            border-radius: 8px;
+            transition: transform 0.3s ease;
+        }
+        .timeline-item:nth-child(odd) .timeline-content {
+             border-right: 4px solid #06b6d4;
+        }
+         .timeline-item:nth-child(even) .timeline-content {
+             border-left: 4px solid #06b6d4;
+        }
+        .timeline-dot {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: #0f172a;
+            border: 4px solid #06b6d4;
+            top: 24px;
+            border-radius: 50%;
+            z-index: 10;
+        }
+        .timeline-item:nth-child(odd) .timeline-dot {
+            right: -10px;
+        }
+        .timeline-item:nth-child(even) .timeline-dot {
+            left: -10px;
+        }
+       
+        /* Skill Tag & Icon Styles */
         .skill-tag {
             background-color: #334155; 
             color: #cbd5e1; 
@@ -94,11 +141,50 @@
             font-size: 0.875rem;
             transition: transform 0.2s ease, background-color 0.2s ease, color 0.2s ease;
         }
-        .skill-tag:hover {
+        .skill-wrapper:hover .skill-tag {
             background-color: #06b6d4;
             color: #0f172a;
             transform: scale(1.05);
         }
+        .skill-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+        .skill-icon {
+            position: absolute;
+            bottom: 120%;
+            left: 50%;
+            background-color: #334155;
+            padding: 8px;
+            border-radius: 8px;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            pointer-events: none;
+            transform: translateX(-50%) translateY(10px);
+            z-index: 20;
+        }
+        .skill-wrapper:hover .skill-icon {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(0);
+        }
+        .skill-icon svg {
+            width: 28px;
+            height: 28px;
+            fill: #06b6d4;
+        }
+        .skill-icon::after { /* Tooltip arrow */
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 100%;
+            transform: translateX(-50%);
+            border-width: 5px;
+            border-style: solid;
+            border-color: #334155 transparent transparent transparent;
+        }
+
     </style>
 </head>
 
@@ -114,19 +200,19 @@
             <a href="#" class="text-2xl font-extrabold text-white">Dhruv Sharma</a>
             <div class="hidden md:flex space-x-6 items-center">
                 <a href="#about" class="hover:text-cyan-400 transition-colors">About</a>
-                <a href="#experience" class="hover:text-cyan-400 transition-colors">Experience</a>
+                <a href="#experience" class="hover:text-cyan-400 transition-colors">My Journey</a>
                 <a href="#projects" class="hover:text-cyan-400 transition-colors">Projects</a>
                 <a href="#skills" class="hover:text-cyan-400 transition-colors">Skills</a>
                 <a href="#contact" class="bg-cyan-500 hover:bg-cyan-600 text-white font-medium py-2 px-4 rounded-lg transition-colors">Contact</a>
             </div>
-            <button id="mobile-menu-button" class="md:hidden">
+            <button id="mobile-menu-button" class="md-hidden">
                 <i data-lucide="menu" class="w-6 h-6"></i>
             </button>
         </nav>
         <!-- Mobile Menu -->
         <div id="mobile-menu" class="hidden md:hidden px-6 pb-4">
             <a href="#about" class="block py-2 hover:text-cyan-400 transition-colors">About</a>
-            <a href="#experience" class="block py-2 hover:text-cyan-400 transition-colors">Experience</a>
+            <a href="#experience" class="block py-2 hover:text-cyan-400 transition-colors">My Journey</a>
             <a href="#projects" class="block py-2 hover:text-cyan-400 transition-colors">Projects</a>
             <a href="#skills" class="block py-2 hover:text-cyan-400 transition-colors">Skills</a>
             <a href="#contact" class="block mt-2 bg-cyan-500 hover:bg-cyan-600 text-white font-medium py-2 px-4 rounded-lg transition-colors text-center">Contact</a>
@@ -163,7 +249,6 @@
              <h2 class="text-3xl font-bold text-white mb-8 pb-4 border-b border-slate-700">About Me</h2>
              <div class="max-w-4xl mx-auto bg-slate-800/80 rounded-xl p-8 shadow-lg flex flex-col md:flex-row items-center gap-8 backdrop-blur-sm">
                 <div class="w-48 h-48 rounded-full bg-slate-700 flex-shrink-0 border-4 border-cyan-500 overflow-hidden">
-                     <!-- You can replace the src below with a URL to your profile picture -->
                      <img src="./images/AboutImage2.jpeg" alt="Dhruv Sharma profile picture" class="w-full h-full object-cover">
                 </div>
                 <div>
@@ -174,82 +259,91 @@
                         My primary interests lie in software development, particularly in building robust full-stack applications and exploring the potential of machine learning. I thrive in collaborative environments and am always excited to learn new technologies and take on new challenges.
                     </p>
                     <p>
-                        When I'm not coding, I enjoy participating in hackathons and competitive programming contests, which help me sharpen my algorithmic thinking.
+                        When I'm not coding, I enjoy playing football and frisbee.
                     </p>
                 </div>
              </div>
         </section>
 
         <!-- Experience Section -->
-        <section id="experience" class="py-20 section-fade-in">
-            <h2 class="text-3xl font-bold text-white mb-12 pb-4 border-b border-slate-700">Work Experience</h2>
-            <div class="max-w-4xl mx-auto">
-                <div class="bg-slate-800/80 backdrop-blur-sm rounded-xl p-8 shadow-lg border-l-4 border-cyan-500">
-                    <div class="flex justify-between items-start mb-2">
-                        <div>
-                            <h3 class="text-xl font-bold text-white">Summer Research Intern</h3>
-                            <p class="text-cyan-400">VLSI Lab, IIT Gandhinagar</p>
-                        </div>
-                        <p class="text-slate-400 text-sm">May 2025 - July 2025</p>
+        <section id="experience" class="py-20">
+            <h2 class="text-3xl font-bold text-white mb-12 pb-4 border-b border-slate-700 section-fade-in">My Journey</h2>
+            <div class="relative max-w-3xl mx-auto mt-12">
+                <div class="absolute left-1/2 transform -translate-x-1/2 h-full w-0.5 bg-slate-700" aria-hidden="true"></div>
+                
+                <!-- Timeline Item 1 -->
+                <div class="timeline-item section-fade-in">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <p class="text-sm text-cyan-400 font-medium mb-1">May 2025 - July 2025</p>
+                        <h3 class="text-xl font-bold text-white">Summer Research Intern</h3>
+                        <p class="text-slate-400 mb-3">VLSI Lab, IIT Gandhinagar</p>
+                        <ul class="list-disc list-inside text-slate-400 space-y-1 text-sm">
+                            <li>Evaluated performance of custom hardware accelerators on ML inference tasks.</li>
+                            <li>Automated test pipelines, reducing evaluation latency by 20%.</li>
+                        </ul>
                     </div>
-                    <ul class="list-disc list-inside text-slate-400 space-y-2">
-                        <li>Evaluated the performance of custom hardware accelerators with various compressor configurations on ML inference tasks.</li>
-                        <li>Assessed model accuracy and execution speed for AlexNet, LeNet, and ResNet using the Torch-Approx library.</li>
-                        <li>Developed automated test pipelines and result parsing scripts, which successfully reduced evaluation latency by 20%.</li>
-                    </ul>
+                </div>
+
+                <!-- Timeline Item 2 -->
+                <div class="timeline-item section-fade-in" style="transition-delay: 200ms;">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                         <p class="text-sm text-cyan-400 font-medium mb-1">2022 - Present</p>
+                        <h3 class="text-xl font-bold text-white">B.Tech, Dual Major</h3>
+                        <p class="text-slate-400 mb-3">IIT Gandhinagar</p>
+                        <p class="text-slate-400 text-sm">Pursuing Computer Science & Chemical Engineering. Maintaining a CPI of 7.81.</p>
+                    </div>
                 </div>
             </div>
         </section>
+
 
         <!-- Projects Section -->
         <section id="projects" class="py-20 section-fade-in">
             <h2 class="text-3xl font-bold text-white mb-12 pb-4 border-b border-slate-700">Projects</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 auto-rows-[1fr]">
                 
-                <!-- Project Card 1 (Featured) -->
                 <div class="project-card lg:col-span-2 bg-slate-800/80 backdrop-blur-sm rounded-xl p-6 shadow-lg flex flex-col">
                     <h3 class="text-xl font-bold text-white mb-2">Smart Energy Management System</h3>
                     <p class="text-slate-400 flex-grow mb-4">An award-winning hackathon project featuring a live monitoring dashboard, an IoT data pipeline, and a Deep Q-Network agent for cost optimization.</p>
                      <div class="text-sm text-cyan-400 mb-4">
                         <span>React</span> &bull; <span>FastAPI</span> &bull; <span>PyTorch</span> &bull; <span>MQTT</span>
                     </div>
-                    <a href="https://github.com/Dhruv-Sharma01/GreenVolt" class="mt-auto text-white font-medium hover:text-cyan-400 flex items-center">
+                    <a href="https://github.com/Dhruv-Sharma01/GreenVolt" target="_blank" class="mt-auto text-white font-medium hover:text-cyan-400 flex items-center">
                         View Project <i data-lucide="arrow-right" class="w-4 h-4 ml-2"></i>
                     </a>
                 </div>
                 
-                <!-- Project Card 2 -->
                 <div class="project-card bg-slate-800/80 backdrop-blur-sm rounded-xl p-6 shadow-lg flex flex-col">
                     <h3 class="text-xl font-bold text-white mb-2">Lost And Found WebApp</h3>
                     <p class="text-slate-400 flex-grow mb-4">A full-stack application for managing lost and found items, built with the MERN stack.</p>
                     <div class="text-sm text-cyan-400 mb-4">
                         <span>React</span> &bull; <span>Node.js</span> &bull; <span>MongoDB</span>
                     </div>
-                    <a href="https://lostandfound-frontend.onrender.com/" class="mt-auto text-white font-medium hover:text-cyan-400 flex items-center">
+                    <a href="https://lostandfound-frontend.onrender.com/" target="_blank" class="mt-auto text-white font-medium hover:text-cyan-400 flex items-center">
                         View Project <i data-lucide="arrow-right" class="w-4 h-4 ml-2"></i>
                     </a>
                 </div>
 
-                <!-- Project Card 3 -->
                  <div class="project-card bg-slate-800/80 backdrop-blur-sm rounded-xl p-6 shadow-lg flex flex-col">
                     <h3 class="text-xl font-bold text-white mb-2">C++ Chess Engine</h3>
                     <p class="text-slate-400 flex-grow mb-4">A command-line chess engine built from scratch in C++, featuring alpha-beta pruning.</p>
                      <div class="text-sm text-cyan-400 mb-4">
                         <span>C++</span> &bull; <span>Algorithms</span> &bull; <span>CLI</span>
                     </div>
-                    <a href="https://github.com/Dhruv-Sharma01/chess-engine" class="mt-auto text-white font-medium hover:text-cyan-400 flex items-center">
+                    <a href="https://github.com/Dhruv-Sharma01/chess-engine" target="_blank" class="mt-auto text-white font-medium hover:text-cyan-400 flex items-center">
                         View Project <i data-lucide="arrow-right" class="w-4 h-4 ml-2"></i>
                     </a>
                 </div>
 
-                <!-- Project Card 4 -->
                 <div class="project-card lg:col-span-2 bg-slate-800/80 backdrop-blur-sm rounded-xl p-6 shadow-lg flex flex-col">
                     <h3 class="text-xl font-bold text-white mb-2">Physics-Informed Neural Network</h3>
                     <p class="text-slate-400 flex-grow mb-4">Trained a PINN to simulate 1D hillslope diffusion using only initial and boundary conditions, achieving low MSE on synthetic and real-world data.</p>
                      <div class="text-sm text-cyan-400 mb-4">
                         <span>Python</span> &bull; <span>PyTorch</span> &bull; <span>NumPy</span>
                     </div>
-                    <a href="https://github.com/Dhruv-Sharma01/Pinn-.git" class="mt-auto text-white font-medium hover:text-cyan-400 flex items-center">
+                    <a href="https://github.com/Dhruv-Sharma01/Pinn-.git" target="_blank" class="mt-auto text-white font-medium hover:text-cyan-400 flex items-center">
                         View Project <i data-lucide="arrow-right" class="w-4 h-4 ml-2"></i>
                     </a>
                 </div>
@@ -265,22 +359,31 @@
                     <!-- Languages -->
                     <div class="bg-slate-800/80 backdrop-blur-sm p-6 rounded-lg">
                         <h3 class="text-xl font-bold text-white mb-4">Languages</h3>
-                        <div class="flex flex-wrap gap-2">
-                             <span class="skill-tag">Python</span><span class="skill-tag">JavaScript</span><span class="skill-tag">C++</span><span class="skill-tag">GoLang</span><span class="skill-tag">MATLAB</span><span class="skill-tag">Bash</span>
+                        <div class="flex flex-wrap gap-x-4 gap-y-5">
+                            <div class="skill-wrapper"><div class="skill-icon"><svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>Python</title><path d="M12.012 23.61c-3.23.014-5.113-1.42-5.32-3.484l-.002-.022-2.14-8.623-2.14-8.623c-.207-2.064 1.32-3.482 3.18-3.482H12V0h-.012c-4.887 0-7.33 2.14-7.33 5.32v.002l2.14 8.623L4.68 22.57c.23 2.31 2.87 4.88 7.33 4.88v-3.84zm-.023-5.332c1.657 0 2.66-.888 2.66-2.143 0-1.254-1.003-2.14-2.66-2.14-1.657 0-2.66.886-2.66 2.14 0 1.255 1.003 2.143 2.66 2.143zM11.988.39c3.23-.014 5.113 1.42 5.32 3.484l.002.022 2.14 8.623 2.14 8.623c.207 2.064-1.32 3.482-3.18 3.482H12V24h.012c4.887 0 7.33-2.14 7.33-5.32v-.002l-2.14-8.623L19.32 1.43C19.09.12 16.45-1.13 11.99.39v-.002zM12.012 8.9c-1.657 0-2.66-.886-2.66-2.14s1.003-2.14 2.66-2.14c1.657 0 2.66.886 2.66 2.14s-1.003 2.14-2.66 2.14z"/></svg></div><span class="skill-tag">Python</span></div>
+                            <div class="skill-wrapper"><div class="skill-icon"><svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>JavaScript</title><path d="M0 0h24v24H0V0zm22.034 18.272c-.287.828-.738 1.42-1.35 1.776s-1.35.534-2.208.534c-.894 0-1.68-.168-2.352-.504s-1.182-.828-1.53-1.476c-.348-.648-.522-1.44-.522-2.376s.174-1.74.522-2.388c.348-.648.84-1.152 1.476-1.512s1.398-.54 2.304-.54c.942 0 1.74.18 2.394.54s1.152.87 1.512 1.542c.36.672.54 1.464.54 2.376 0 .816-.126 1.548-.378 2.196zm-2.016-2.232c0-.396-.066-.756-.198-1.08s-.33-.582-.594-.774a2.23 2.23 0 0 0-.9-.51c-.354-.09-.75-.132-1.188-.132s-.858.042-1.2.126c-.342.084-.63.228-.864.432s-.402.48-.51.816c-.108.336-.162.732-.162 1.188s.054.882.162 1.278c.108.396.282.72.522.972s.546.438.918.558c.372.12.78.18 1.224.18s.846-.06 1.218-.18c.372-.12.684-.312.936-.576s.438-.594.558-.99c.12-.396.18-.852.18-1.368zM9.538 18.236c-.252.756-.66 1.326-1.224 1.71s-1.23.576-2.004.576c-.75 0-1.392-.126-1.926-.378s-.93-.63-1.194-1.134c-.264-.504-.396-1.11-.396-1.818 0-1.56.618-2.778 1.854-3.654a10.02 10.02 0 0 1-1.152-1.032c-.252-.312-.432-.69-.54-. scholastic.
+-1.134s-.162-.966-.162-1.566c0-.528.09-.99.27-1.386s.42-.726.726-.99c.306-.264.672-.456 1.098-.576s.888-.18 1.386-.18c.552 0 1.05.078 1.494.234s.816.39.112.696c.306.306.528.666.666 1.08s.204.858.204 1.332c0 .48-.066.924-.198 1.332a4.13 4.13 0 0 1-.504.99c-.216.3-.45.564-.702.792l1.566 4.32zM7.222 14.15c.312-.66.468-1.398.468-2.214 0-.48-.06-.894-.18-1.242s-.312-.618-.576-.81c-.264-.192-.6-.312-.996-.36s-.822-.072-1.278-.072c-.396 0-.744.03-.996.09s-.498.18-.732.36c-.234.18-.42.42-.558.72a1.9 1.9 0 0 0-.21 1.008c0 .324.066.624.198.9s.33.51.594.708c.264.198.6.348.996.45s.828.15 1.296.15c.576 0 1.098-.066 1.566-.198z"/></svg></div><span class="skill-tag">JavaScript</span></div>
+                            <div class="skill-wrapper"><div class="skill-icon"><svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>C++</title><path d="M14.22 3.899H9.78l-4.2 13.59h2.36l.78-3.03h5.2l.78 3.03h2.36M8.35 12.7l1.9-7.22 1.9 7.22M24 10.89v2.22h-3.33v3.33h-2.22v-3.33H15.1v-2.22h3.35V7.56h2.22v3.33Z"/></svg></div><span class="skill-tag">C++</span></div>
+                            <span class="skill-tag">GoLang</span>
+                            <span class="skill-tag">MATLAB</span>
+                            <span class="skill-tag">Bash</span>
                         </div>
                     </div>
                     <!-- Web Dev -->
                     <div class="bg-slate-800/80 backdrop-blur-sm p-6 rounded-lg">
                         <h3 class="text-xl font-bold text-white mb-4">Web Development</h3>
-                        <div class="flex flex-wrap gap-2">
-                            <span class="skill-tag">ReactJS</span><span class="skill-tag">NodeJS</span><span class="skill-tag">ExpressJS</span><span class="skill-tag">Flask</span><span class="skill-tag">Django</span><span class="skill-tag">HTML</span><span class="skill-tag">Tailwind CSS</span><span class="skill-tag">RESTful API</span>
+                        <div class="flex flex-wrap gap-x-4 gap-y-5">
+                            <div class="skill-wrapper"><div class="skill-icon"><svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>React</title><path d="M12.012 21.43c-3.265 0-5.89-2.637-5.89-5.912 0-3.275 2.625-5.912 5.89-5.912s5.89 2.637 5.89 5.912c0 3.275-2.625 5.912-5.89 5.912zm0-10.823c-2.71 0-4.9 2.198-4.9 4.911 0 2.71 2.19 4.911 4.9 4.911s4.9-2.198 4.9-4.91c0-2.71-2.19-4.91-4.9-4.91zM6.55 12.03c1.337-2.31 3.93-3.868 6.9-3.868 2.972 0 5.565 1.556 6.9 3.868-1.335 2.31-3.928 3.868-6.9 3.868-2.97 0-5.563-1.556-6.9-3.868zM12.012 0C5.39 0 0 5.378 0 12.003S5.39 24 12.012 24c6.623 0 11.988-5.378 11.988-11.997S18.635 0 12.012 0zm0 21.6c-5.302 0-9.6-4.309-9.6-9.597S6.71 2.403 12.012 2.403c5.302 0 9.588 4.309 9.588 9.597S17.314 21.6 12.012 21.6z"/></svg></div><span class="skill-tag">ReactJS</span></div>
+                            <div class="skill-wrapper"><div class="skill-icon"><svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>Node.js</title><path d="M12.353 21.99l.215-1.023c.338.07.676.104 1.014.104.95 0 1.594-.48 1.594-1.295 0-.547-.282-.87-.79-1.09l-1.09-.48c-1.309-.56-2.17-1.39-2.17-2.822 0-1.68 1.309-2.87 3.28-2.87 1.014 0 1.95.23 2.66.61l-.21 1.01c-.604-.3-1.36-.51-2.45-.51-.88 0-1.42.4-1.42 1.12 0 .5.25.79.72 1.01l1.09.48c1.55.66 2.24 1.48 2.24 2.92 0 1.8-1.42 3.03-3.55 3.03-1.21 0-2.3-.28-3.09-.72zM4.174 12.1c0-2.09 1.69-3.79 3.76-3.79s3.76 1.7 3.76 3.79-1.7 3.79-3.76 3.79-3.76-1.7-3.76-3.79zm6.06 0c0-1.27-1.03-2.3-2.3-2.3s-2.3 1.03-2.3 2.3 1.03 2.3 2.3 2.3 2.3-1.03 2.3-2.3zM12.002 2C6.48 2 2 6.48 2 12s4.48 10 10.002 10h.01c5.522 0 9.988-4.48 9.988-10S17.534 2 12.002 2z"/></svg></div><span class="skill-tag">NodeJS</span></div>
+                            <span class="skill-tag">ExpressJS</span><span class="skill-tag">Flask</span><span class="skill-tag">Django</span><span class="skill-tag">HTML</span><span class="skill-tag">Tailwind CSS</span><span class="skill-tag">RESTful API</span>
                         </div>
                     </div>
                     <!-- Databases -->
                      <div class="bg-slate-800/80 backdrop-blur-sm p-6 rounded-lg">
                         <h3 class="text-xl font-bold text-white mb-4">Databases</h3>
-                        <div class="flex flex-wrap gap-2">
-                             <span class="skill-tag">MongoDB</span><span class="skill-tag">MySQL</span><span class="skill-tag">PostgreSQL</span><span class="skill-tag">SQLite</span>
+                        <div class="flex flex-wrap gap-x-4 gap-y-5">
+                            <div class="skill-wrapper"><div class="skill-icon"><svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>MongoDB</title><path d="M15.93 23.332C15.034 23.768 14.01 24 12.896 24c-4.48 0-7.23-2.22-7.23-6.848 0-5.83 3.42-7.66 7.82-7.66.71 0 1.25.08 1.83.19v2.21c-.53-.13-1.03-.2-1.6-.2-2.83 0-4.32 1.34-4.32 5.25 0 3.19 1.25 4.8 3.71 4.8 1.13 0 1.9-.38 2.59-.83v-3.7H13.6v-1.98h4.41v8.842h-2.08zM12.81 2.62c-1.39-1.09-3.23-1.6-4.9-1.6C3.93 1.02.94 4.04.94 8.68c0 3.31 1.48 5.6 4.1 6.55 1.5.55 3.2.85 4.75.85 2.11 0 3.99-.61 5.4-1.92l-1.45-1.45c-1.02.92-2.18 1.41-3.95 1.41-2.89 0-5.4-2.06-5.4-5.59s2.4-5.38 4.96-5.38c1.23 0 2.25.33 3.13 1.02l1.23-1.5z"/></svg></div><span class="skill-tag">MongoDB</span></div>
+                             <span class="skill-tag">MySQL</span><span class="skill-tag">PostgreSQL</span><span class="skill-tag">SQLite</span>
                         </div>
                     </div>
                     <!-- Libraries & Frameworks -->
@@ -374,7 +477,7 @@
         // Interactive Cursor
         const cursorDot = document.querySelector('.cursor-dot');
         const cursorCircle = document.querySelector('.cursor-circle');
-        const interactiveElements = document.querySelectorAll('a, button, [data-lucide]');
+        const interactiveElements = document.querySelectorAll('a, button, [data-lucide], .skill-wrapper');
 
         window.addEventListener('mousemove', e => {
             const posX = e.clientX;
